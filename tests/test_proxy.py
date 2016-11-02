@@ -3,6 +3,7 @@ import unittest
 
 from ethereum import abi
 from ethereum import tester
+from ethereum.config import default_config
 from ethereum.tester import TransactionFailed
 from ethereum.utils import denoms
 from rlp.utils_py2 import decode_hex
@@ -33,6 +34,8 @@ class GNTCrowdfundingTest(unittest.TestCase):
 
     def setUp(self):
         self.state = tester.state()
+        self.starting_block = default_config.get('ANTI_DOS_FORK_BLKNUM') + 1
+        self.state.block.number = self.starting_block
 
         available_after = self.state.block.timestamp + 1000
 

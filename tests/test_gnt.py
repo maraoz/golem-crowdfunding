@@ -45,8 +45,10 @@ IMPORT_TOKEN_REGEX = '(import "\.\/Token\.sol";).*'
 IMPORT_ALLOC_REGEX = '(import "\.\/GNTAllocation\.sol";).*'
 DEV_ADDR_REGEX = "\s*allocations\[([a-zA-Z0-9]+)\].*"
 
-# https://twitter.com/ethereumproject/status/788741960056070145
-tester.gas_limit = 2 * 10 ** 6
+gwei = 10 ** 9
+
+tester.gas_limit = int(1.9 * 10 ** 6)
+tester.gas_price = int(22.5 * gwei)
 
 
 @contextmanager
@@ -1079,6 +1081,8 @@ class GNTCrowdfundingTest(unittest.TestCase):
         self.state.send(tester.k1, addr, value)
         assert self.c.totalSupply() == value * 1000
         self.state.mine(6)
+
+        lg = self.state.block.gas_used
         b = self.state.block.get_balance(tester.a1)
 
         with self.event_listener(self.c, self.state) as listener:
@@ -1090,7 +1094,7 @@ class GNTCrowdfundingTest(unittest.TestCase):
             assert not listener.events  # no more events
 
         refund = self.state.block.get_balance(tester.a1) - b
-        assert refund > value * 0.9999999999999999
+        assert refund == value - (self.state.block.gas_used - lg) * tester.gas_price
 
         b = self.state.block.get_balance(tester.a2)
         with self.assertRaises(TransactionFailed):

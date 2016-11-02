@@ -29,6 +29,11 @@ MIGRATION_ABI = open('tests/MigrationAgent.abi', 'r').read()
 TARGET_INIT = decode_hex(open('tests/GNTTargetToken.bin', 'r').read().rstrip())
 TARGET_ABI = open('tests/GNTTargetToken.abi', 'r').read()
 
+gwei = 10 ** 9
+
+tester.gas_limit = int(1.9 * 10 ** 6)
+tester.gas_price = int(22.5 * gwei)
+
 
 class GNTCrowdfundingTest(unittest.TestCase):
 

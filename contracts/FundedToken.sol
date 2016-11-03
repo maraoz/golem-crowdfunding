@@ -1,13 +1,6 @@
 pragma solidity ^0.4.4;
 
-import "./GNTAllocation.sol";
-import "./FundedToken.sol";
-
-contract MigrationAgent {
-    function migrateFrom(address _from, uint256 _value);
-}
-
-contract GolemNetworkToken is FundedToken {
+contract FundedToken {
     string public constant name = "Golem Network Token";
     string public constant symbol = "GNT";
     uint8 public constant decimals = 18;  // 18 decimal places, the same as ETH.
